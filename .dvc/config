@@ -1,6 +1,0 @@
-[cache]
-type = copy
-['remote "default_storage"']
-url = /tmp/dvc-storage
-[core]
-remote = default_storage

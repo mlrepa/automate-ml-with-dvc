@@ -53,7 +53,20 @@ __1) Install DVC__
 [Link for installation instructions](https://dvc.org/doc/get-started/install)
 
 __2) Initialize DVC init__
-ONLY if you build the project from scratch. For projects clonned from GitHub it's already initialized.  
+ONLY if you build the project from scratch. For projects clonned from GitHub it's already initialized.
+
+Initialize DVC 
+```bash
+dvc init
+```
+
+Commit dvc init
+
+```bash
+git commit -m "Initialize DVC"
+``` 
+
+__3) Add remote storage for DVC (any local folder)__
 ```bash
 dvc init
 dvc config cache.type copy
@@ -223,3 +236,9 @@ this stage:
 
 Reproduce stage: `dvc repro pipeline_evaluate.dvc`
 
+
+
+# References used for this tutorial
+
+1) [DVC tutorial](https://dvc.org/doc/tutorial) 
+2) [100 - Logistic Regression with IRIS and pytorch](https://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/100_Logistic_IRIS.html) 
