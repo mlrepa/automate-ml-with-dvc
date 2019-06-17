@@ -11,13 +11,10 @@ def split_common_config():
 
     # add arguments
     args_parser = argparse.ArgumentParser()
-
     args_parser.add_argument('--config', dest='config', required=True)
-
     args = args_parser.parse_args()
 
     # read config and get config sections
-
     config = yaml.load(open(args.config), Loader=yaml.FullLoader)
 
     dataset_config = config['dataset']
