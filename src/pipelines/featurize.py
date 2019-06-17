@@ -2,7 +2,7 @@ import argparse
 import yaml
 
 from src.data.dataset import get_dataset
-from src.features.features import create_new_features
+from src.features.features import extract_features
 
 
 if __name__ == '__main__':
@@ -17,6 +17,6 @@ if __name__ == '__main__':
     dataset = get_dataset(config['dataset_csv'])
     featured_dataset_csv = config['featured_dataset_csv']
 
-    featured_dataset = create_new_features(dataset)
+    featured_dataset = extract_features(dataset)
     featured_dataset.to_csv(featured_dataset_csv, index=False)
 

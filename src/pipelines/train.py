@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     train_df = get_dataset(config['train_csv'])
 
-    model = model = train(
+    model = train(
         df=train_df,
         features_columns_range=features_columns_range,
         target_column=target_column,
