@@ -1,0 +1,16 @@
+md5: 51b24ef3311b1e4f670f99a6c78984ce
+cmd: python src/pipelines/featurize.py --config=experiments/featurize_config.yml
+wdir: .
+deps:
+- md5: c8768ad1bfb3b7a423bbe5ba71571240
+  path: src/pipelines/featurize.py
+- md5: 3d9c113b409731fba887d5a9cd43b486
+  path: experiments/featurize_config.yml
+- md5: 57fce90c81521889c736445f058c4838
+  path: data/raw/iris.csv
+outs:
+- md5: f47c444d6409010b8ec509d0d540c7fd
+  path: data/interim/featured_iris.csv
+  cache: true
+  metric: false
+  persist: false

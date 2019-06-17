@@ -3,6 +3,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
+from sklearn.metrics import f1_score, make_scorer
 
 
 class UnsupportedClassifier(Exception):
@@ -22,7 +23,7 @@ def get_supported_estimator():
     }
 
 
-def train(df, features_columns_range, target_column, estimator_name, grid_search_cv_config):
+def train(df, target_column, estimator_name, param_grid,  cv):
 
     estimators = get_supported_estimator()
 
@@ -31,11 +32,18 @@ def train(df, features_columns_range, target_column, estimator_name, grid_search
         raise UnsupportedClassifier(estimator_name)
 
     estimator = estimators[estimator_name]()
-    clf = GridSearchCV(estimator=estimator, **grid_search_cv_config)
+    f1_scorer = make_scorer(f1_score, average='weighted')
 
-    Xtrain, Ytrain = df.loc[:, features_columns_range[0]:features_columns_range[1]].values, df.loc[:, target_column].values
-    Xtrain = Xtrain.astype("float32")
+    clf = GridSearchCV(estimator=estimator,
+                       param_grid =  param_grid,
+                       cv=cv,
+                       verbose=1,
+                       scoring=f1_scorer)
 
-    clf.fit(Xtrain, Ytrain)
+    # Get X and Y
+    y_train = df.loc[:, target_column].values.astype("float32")
+    X_train = df.drop(target_column, axis=1).values
+
+    clf.fit(X_train, y_train)
 
     return clf

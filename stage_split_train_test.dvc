@@ -1,0 +1,22 @@
+md5: 6cb981471514e7690ef7ff4ff5cadac6
+cmd: python src/pipelines/split_train_test.py --config=experiments/split_train_test_config.yml
+  --base_config=config/pipeline_config.yml
+wdir: .
+deps:
+- md5: 52b9432b97501cb3f5392f1250dd12dc
+  path: src/pipelines/split_train_test.py
+- md5: 7fcf7d4c56cd36d485c9776c8dfbafa7
+  path: experiments/split_train_test_config.yml
+- md5: f47c444d6409010b8ec509d0d540c7fd
+  path: data/interim/featured_iris.csv
+outs:
+- md5: 366af2683b508936c8c83e963e88cd40
+  path: data/processed/train_iris.csv
+  cache: true
+  metric: false
+  persist: false
+- md5: 7651c34292c7d846debd07ed83897606
+  path: data/processed/test_iris.csv
+  cache: true
+  metric: false
+  persist: false

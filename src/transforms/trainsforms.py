@@ -7,6 +7,7 @@ def transform_targets_to_numerics(df, target_column):
 
     dataset = df.copy()
     le = LabelEncoder()
+
     dataset[target_column] = le.fit_transform(dataset[target_column])
 
     return dataset

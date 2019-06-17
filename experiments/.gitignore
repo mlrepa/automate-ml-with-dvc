@@ -5,3 +5,5 @@
 /split_train_test_config.yml
 /train_clf_config.yml
 /eval.txt
+/train_config.yml
+/evaluate_config.yml

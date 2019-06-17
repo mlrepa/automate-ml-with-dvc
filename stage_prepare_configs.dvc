@@ -1,0 +1,29 @@
+md5: 67c664b6b66fac44d79654c436a736a2
+cmd: python src/pipelines/prepare_configs.py --config=config/pipeline_config.yml
+wdir: .
+deps:
+- md5: 59058363b5fcdf559154c79e4a0a6f5e
+  path: src/pipelines/prepare_configs.py
+- md5: d9b1fc23804d6f12fa4540bde05b18cb
+  path: config/pipeline_config.yml
+outs:
+- md5: 7fcf7d4c56cd36d485c9776c8dfbafa7
+  path: experiments/split_train_test_config.yml
+  cache: true
+  metric: false
+  persist: false
+- md5: 3d9c113b409731fba887d5a9cd43b486
+  path: experiments/featurize_config.yml
+  cache: true
+  metric: false
+  persist: false
+- md5: 0962f3873bcc28078851867c92d22fc3
+  path: experiments/train_config.yml
+  cache: true
+  metric: false
+  persist: false
+- md5: 91c85b95fcb52f7b1957c02d11143a2d
+  path: experiments/evaluate_config.yml
+  cache: true
+  metric: false
+  persist: false
