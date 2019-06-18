@@ -1,9 +1,11 @@
 
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import f1_score, make_scorer
+from typing import Text, Dict
 
 
 class UnsupportedClassifier(Exception):
@@ -23,7 +25,7 @@ def get_supported_estimator():
     }
 
 
-def train(df, target_column, estimator_name, param_grid,  cv):
+def train(df: pd.DataFrame, target_column: Text, estimator_name: Text, param_grid: Dict,  cv: int):
 
     estimators = get_supported_estimator()
 

@@ -1,6 +1,7 @@
+import pandas as pd
 
 
-def extract_features(df):
+def extract_features(df: pd.DataFrame) -> pd.DataFrame:
 
     dataset = df.copy()
 

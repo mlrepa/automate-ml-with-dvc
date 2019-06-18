@@ -1,7 +1,11 @@
+import numpy as np
+import pandas as pd
+import sklearn.base
 from sklearn.metrics import confusion_matrix, f1_score
+from typing import Text, Tuple
 
 
-def evaluate(df, target_column, clf):
+def evaluate(df: pd.DataFrame, target_column: Text, clf: sklearn.base.BaseEstimator) -> Tuple[float, np.array]:
     
    # Get X and Y
     y_test = df.loc[:, target_column].values.astype("float32")
