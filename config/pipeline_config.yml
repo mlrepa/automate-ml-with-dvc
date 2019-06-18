@@ -29,21 +29,15 @@ featurize:
 
 train:
   cv: 5
-  estimator_name: logreg
-
+  estimator_name: svm
   estimators:
 
     logreg: # sklearn.linear_model.LogisticRegression
       param_grid: # params of GridSearchCV constructor
-        C: [0.001, 0.01]
+        C: [0.001, 0.01]train
         max_iter: [100]
         solver: ['lbfgs']
         multi_class: ['multinomial']
-
-    knn: # sklearn.neighbors.KNeighborsClassifier
-      param_grid:
-        n_neighbors: [5,15]
-        p: [1,2]
 
     svm: # sklearn.svm.SVC
       param_grid:
@@ -51,6 +45,13 @@ train:
         kernel: ["rbf", "linear"]
         gamma: ["scale"]
         degree: [3, 5]
+#
+#    knn: # sklearn.neighbors.KNeighborsClassifier
+#      param_grid:
+#        n_neighbors: [5,15]
+#        p: [1,2]
+#
+
 
 
 evaluate:
