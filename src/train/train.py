@@ -40,7 +40,8 @@ def train(df: pd.DataFrame, target_column: Text, estimator_name: Text, param_gri
                        param_grid =  param_grid,
                        cv=cv,
                        verbose=1,
-                       scoring=f1_scorer)
+                       scoring=f1_scorer,
+                       iid=True)
 
     # Get X and Y
     y_train = df.loc[:, target_column].values.astype("float32")
