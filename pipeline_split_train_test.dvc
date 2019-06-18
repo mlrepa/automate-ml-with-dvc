@@ -1,10 +1,12 @@
-md5: 6cb981471514e7690ef7ff4ff5cadac6
+md5: e3e388ab8de3811892e3faaec16ab26b
 cmd: python src/pipelines/split_train_test.py --config=experiments/split_train_test_config.yml
   --base_config=config/pipeline_config.yml
 wdir: .
 deps:
 - md5: 52b9432b97501cb3f5392f1250dd12dc
   path: src/pipelines/split_train_test.py
+- md5: d9b1fc23804d6f12fa4540bde05b18cb
+  path: config/pipeline_config.yml
 - md5: 7fcf7d4c56cd36d485c9776c8dfbafa7
   path: experiments/split_train_test_config.yml
 - md5: f47c444d6409010b8ec509d0d540c7fd

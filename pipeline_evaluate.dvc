@@ -1,12 +1,14 @@
-md5: 4d31d5e5b671c8055d11f1644b2650b5
+md5: 4d5c4f9c1148a4f42cffb25ec6932a67
 cmd: python src/pipelines/evaluate.py --config=experiments/evaluate_config.yml --base_config=config/pipeline_config.yml
 wdir: .
 deps:
 - md5: 45264a53a79bb0a7b74d4f558fab6dfc
   path: src/pipelines/evaluate.py
+- md5: d9b1fc23804d6f12fa4540bde05b18cb
+  path: config/pipeline_config.yml
 - md5: 91c85b95fcb52f7b1957c02d11143a2d
   path: experiments/evaluate_config.yml
-- md5: 3971abfc733312b99674d88612af0912
+- md5: dfe48e49c635d371ff151174d7fef6ad
   path: models/model.joblib
 outs:
 - md5: d9e6179f82ccc574b27763a38177f3d7
