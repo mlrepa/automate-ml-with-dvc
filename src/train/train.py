@@ -25,7 +25,7 @@ def get_supported_estimator():
     }
 
 
-def train(df: pd.DataFrame, target_column: Text, estimator_name: Text, param_grid: Dict,  cv: int):
+def train(df: pd.DataFrame, target_column: Text, estimator_name: Text, param_grid: Dict, cv: int):
 
     estimators = get_supported_estimator()
 
