@@ -1,21 +1,21 @@
-Directory Structure
+# Project Structure
 --------------------
-
     .
     ├── README.md
-    ├── models  <- compiled model .pkl or HDFS or .pb format
     ├── config  <- any configuration files
     ├── data
     │   ├── external <- external data
     │   ├── interim <- data in intermediate processing stage
     │   ├── processed <- data after all preprocessing has been done
     │   └── raw <- original unmodified data acting as source of truth and provenance
-    ├── docs  <- usage documentation or reference papers
-    ├── notebooks <- jupyter notebooks for exploratory analysis and explanation 
     ├── docker <- docker image(s) for running project inside container(s)
+    ├── docs  <- usage documentation or reference papers
+    ├── models  <- compiled model .pkl or HDFS or .pb format
+    ├── notebooks <- jupyter notebooks for exploratory analysis and explanation 
     └── src
         ├── data <- data prepare and/or preprocess
         ├── evaluate <- evaluating model stage code 
+        ├── features <- code to compute features
         ├── pipelines <- scripts of pipelines
         ├── report <- visualization (often used in notebooks)
         ├── train <- train model stage code
@@ -68,7 +68,6 @@ git commit -m "Initialize DVC"
 
 __3) Add remote storage for DVC (any local folder)__
 ```bash
-dvc init
 dvc config cache.type copy
 dvc remote add -d default_storage /tmp/dvc-storage
 ```
@@ -146,7 +145,7 @@ dvc run -f stage_prepare_configs.dvc \
         -o experiments/featurize_config.yml \
         -o experiments/train_config.yml \
         -o experiments/evaluate_config.yml \
-        python src/pipelines/prepare_configs.py \ 
+        python src/pipelines/prepare_configs.py \
             --config=config/pipeline_config.yml
 ```
 
@@ -165,11 +164,6 @@ dvc run -f stage_featurize.dvc \
         --config=experiments/featurize_config.yml
 ```
 
-
-this pipeline:
-1) creates new dataset with new features (`data/interim/featured_iris.csv`)
-2) generates stage file `pipeline_featurize.dvc`
-
 Reproduce stage: `dvc repro pipeline_featurize.dvc`
 
         
@@ -187,12 +181,7 @@ dvc run -f stage_split_train_test.dvc \
     python src/pipelines/split_train_test.py \
         --config=experiments/split_train_test_config.yml \
         --base_config=config/pipeline_config.yml
-```
-
-this stage:
-
-1) creates csv files `train_iris.csv` and `test_iris.csv` in folder `data/processed`
-2) generates stage file `pipeline_split_train_test.dvc`        
+```   
 
 Reproduce stage: `dvc repro pipeline_split_train_test.dvc`
 
@@ -209,13 +198,7 @@ dvc run -f stage_train.dvc \
     python src/pipelines/train.py \
         --config=experiments/train_config.yml \
         --base_config=config/pipeline_config.yml
-```
-
-
-this stage:
-
-1) trains and save model
-2) generates stage file `pipeline_train.dvc`        
+```   
 
 Reproduce stage: `dvc repro pipeline_train.dvc`
 
@@ -233,13 +216,7 @@ dvc run -f stage_evaluate.dvc \
         --config=experiments/evaluate_config.yml \
         --base_config=config/pipeline_config.yml
 ```    
-    
 
-this stage:
-
-1) evaluate model
-2) save evaluating report (metrics file `experiments/eval.txt`)
-3) generate stage file `pipeline_evaluate.dvc`
 
 Reproduce stage: `dvc repro pipeline_evaluate.dvc`
 
