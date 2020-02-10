@@ -9,22 +9,25 @@ from src.data.dataset import get_dataset
 from src.evaluate.evaluate import evaluate
 
 
-def evaluate_model(config_path: Text, base_config_path: Text):
+def evaluate_model(config_path: Text, base_config_path: Text) -> None:
+    """Evaluate model.
+    Args:
+        config_path {Text}: path to config
+        base_config_path {Text}: path to base config
+    """
 
-    config = yaml.load(open(config_path), Loader=yaml.FullLoader)
-    base_config = yaml.load(open(base_config_path), Loader=yaml.FullLoader)
+    config = yaml.safe_load(open(config_path))
+    base_config = yaml.safe_load(open(base_config_path))
 
     target_column = base_config['featurize']['target_column']
-    test_df = get_dataset(base_config['split_train_test']['test_csv'])
-    model_name = base_config['base']['model']['model_name']
     models_folder = base_config['base']['model']['models_folder']
+    model_name = base_config['base']['model']['model_name']
 
+    test_df = get_dataset(base_config['split_train_test']['test_csv'])
     model = joblib.load(os.path.join(models_folder, model_name))
-
     f1, cm = evaluate(df=test_df,
                       target_column=target_column,
                       clf=model)
-
     test_report = {
         'f1_score': f1,
         'confusion_matrix': cm.tolist()
@@ -36,6 +39,7 @@ def evaluate_model(config_path: Text, base_config_path: Text):
 
 
 if __name__ == '__main__':
+
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument('--config', dest='config', required=True)
     args_parser.add_argument('--base_config', dest='base_config', required=True)

@@ -1,18 +1,22 @@
 import argparse
-from typing import Text
-
 import joblib
 import os
+from typing import Text
 import yaml
 
 from src.data.dataset import get_dataset
 from src.train.train import train
 
 
-def train_model(config_path: Text, base_config_path: Text):
+def train_model(config_path: Text, base_config_path: Text) -> None:
+    """Train model.
+    Args:
+        config_path {Text}: path to config
+        base_config_path {Text}: path to base config
+    """
 
-    config = yaml.load(open(config_path), Loader=yaml.FullLoader)
-    base_config = yaml.load(open(base_config_path), Loader=yaml.FullLoader)
+    config = yaml.safe_load(open(config_path))
+    base_config = yaml.safe_load(open(base_config_path))
 
     estimator_name = config['estimator_name']
     param_grid = config['estimators'][estimator_name]['param_grid']
@@ -20,7 +24,6 @@ def train_model(config_path: Text, base_config_path: Text):
 
     target_column = base_config['featurize']['target_column']
     train_df = get_dataset(base_config['split_train_test']['train_csv'])
-
     model = train(
         df=train_df,
         target_column=target_column,
@@ -28,9 +31,7 @@ def train_model(config_path: Text, base_config_path: Text):
         param_grid=param_grid,
         cv=cv
     )
-
     print(model.best_score_)
-
     model_name = base_config['base']['model']['model_name']
     models_folder = base_config['base']['model']['models_folder']
 
