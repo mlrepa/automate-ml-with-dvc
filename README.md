@@ -1,37 +1,40 @@
 # Project Structure
 --------------------
+
+```
     .
-    ├── README.md
-    ├── config  <- any configuration files
+    ├── config
+    │   └── pipeline_config.yml     <- pipeline config
     ├── data
-    │   ├── external <- external data
-    │   ├── interim <- data in intermediate processing stage
-    │   ├── processed <- data after all preprocessing has been done
-    │   └── raw <- original unmodified data acting as source of truth and provenance
-    ├── docker <- docker image(s) for running project inside container(s)
-    ├── docs  <- usage documentation or reference papers
-    ├── models  <- compiled model .pkl or HDFS or .pb format
-    ├── notebooks <- jupyter notebooks for exploratory analysis and explanation 
-    └── src
+    │   ├── external                <- external data
+    │   ├── interim                 <- data in intermediate processing stage
+    │   ├── processed               <- data after all preprocessing has been done
+    │   └── raw                     <- original unmodified data acting as source of truth and provenance
+    ├── docs
+    ├── experiments                 <- folder for experiments intermediate files
+    ├── models                      <- folder for ML models
+    ├── notebooks
+    ├── src
         ├── data <- data prepare and/or preprocess
         ├── evaluate <- evaluating model stage code 
         ├── features <- code to compute features
         ├── pipelines <- scripts of pipelines
         ├── report <- visualization (often used in notebooks)
         ├── train <- train model stage code
-        ├── transforms <- transformations data code (e.g., augmentation) 
-        └── utils.py <- auxiliary functions and classes
-        
+        └── transforms <- transformations data code (e.g., augmentation) 
+    ├── docker-compose.yml
+    ├── Dockerfile
+    └── README.md
 
+```
 # Preparation
 
 ### 1. Clone this repository
 
 ```bash
 git clone https://gitlab.com/7labs.ru/tutorials-dvc/dvc-2-iris-demo-project.git
-```
-
 cd dvc-2-iris-demo-project
+```
 
 ### 2. Get data
 
@@ -44,35 +47,7 @@ wget -P data/raw/ -nc https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pa
 It may not work for Windows. So, use the [this link](https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv) 
 to load data into `data/raw/` folder
 
-
-### 3. Initialize DVC init 
-
-__1) Install DVC__ 
-`pip install dvc`
-
-[Link for installation instructions](https://dvc.org/doc/get-started/install)
-
-__2) Initialize DVC init__
-ONLY if you build the project from scratch. For projects clonned from GitHub it's already initialized.
-
-Initialize DVC 
-```bash
-dvc init
-```
-
-Commit dvc init
-
-```bash
-git commit -m "Initialize DVC"
-``` 
-
-__3) Add remote storage for DVC (any local folder)__
-```bash
-dvc config cache.type copy
-dvc remote add -d default_storage /tmp/dvc-storage
-```
-
-### 4. Create .env file in `config/` folder 
+### 3. Create .env file in `config/` folder 
 ```bash
 GIT_CONFIG_USER_NAME=<git user>
 GIT_CONFIG_EMAIL=<git email>
@@ -80,29 +55,24 @@ GIT_CONFIG_EMAIL=<git email>
    
 example
 
-```bash
+```.env
 GIT_CONFIG_USER_NAME=mnrozhkov
 GIT_CONFIG_EMAIL=mnrozhkov@gmail.com
 ```
-    
-### Setup docker tools and build docker image 
-Tutorial should work beyond docker container BUT not tested. 
 
-__1) Install Docker and docker-compose tools__  
-Links may help:
+# Build image
 
-* [Link to Docker installation instructions](https://docs.docker.com/install/)
-* [Link to docker-compose instructions](https://docs.docker.com/compose/install/)
+```bash
+ln -sf config/.env && docker-compose build
+```
 
-__2) Build docker image__
-
-    ln -sf config/.env && docker-compose build
-  
 # Run     
     
 Run docker container via docker-compose  
 
-    docker-compose up
+```bash
+docker-compose up
+```
 
 # Tutorial 
     
@@ -111,7 +81,6 @@ Run docker container via docker-compose
 
 ### Step 2: Move code to .py modules
 - i.e. main funcitons and classes 
-
 
 ### Step 3: Add pipelines (stages) on Python modules
 
@@ -130,13 +99,15 @@ Main stages:
 * __evaluate.py__: evaluate model and create metrics file
 
     
-### Step 4: Automate pipelines (DAG) execution  
+### Step 4: Automate pipelines (DAG) execution
+  
 - add pipelines dependencies under DVC control
 - add models/data/congis under DVC control
 
-__1) Prepare configs__
+1. Prepare configs
 
 Run stage:
+
 ```bash
 dvc run -f stage_prepare_configs.dvc \
         -d src/pipelines/prepare_configs.py \
@@ -152,7 +123,7 @@ dvc run -f stage_prepare_configs.dvc \
 Reproduce stage: `dvc repro pipeline_prepare_configs.dvc`
 
 
-__2) Features extraction__
+2. Features extraction
 
 ```bash
 dvc run -f stage_featurize.dvc \
@@ -167,7 +138,7 @@ dvc run -f stage_featurize.dvc \
 Reproduce stage: `dvc repro pipeline_featurize.dvc`
 
         
-__3) Split train/test datasets__
+3. Split train/test datasets
 
 Run stage:
 
@@ -186,9 +157,10 @@ dvc run -f stage_split_train_test.dvc \
 Reproduce stage: `dvc repro pipeline_split_train_test.dvc`
 
 
-__4) Train model__ 
+4. Train model 
 
 Run stage:
+
 ```bash
 dvc run -f stage_train.dvc \
     -d src/pipelines/train.py \
@@ -203,9 +175,10 @@ dvc run -f stage_train.dvc \
 Reproduce stage: `dvc repro pipeline_train.dvc`
 
 
-__5) Evaluate model__
+5. Evaluate model
 
 Run stage:
+
 ```bash
 dvc run -f stage_evaluate.dvc \
     -d src/pipelines/evaluate.py \
@@ -221,8 +194,7 @@ dvc run -f stage_evaluate.dvc \
 Reproduce stage: `dvc repro pipeline_evaluate.dvc`
 
 
-
 # References used for this tutorial
 
-1) [DVC tutorial](https://dvc.org/doc/tutorial) 
-2) [100 - Logistic Regression with IRIS and pytorch](https://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/100_Logistic_IRIS.html) 
+1. [DVC tutorial](https://dvc.org/doc/tutorial) 
+2. [100 - Logistic Regression with IRIS and pytorch](https://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/100_Logistic_IRIS.html) 
