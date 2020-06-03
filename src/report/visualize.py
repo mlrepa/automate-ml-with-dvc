@@ -1,13 +1,15 @@
 import itertools
+import matplotlib.colors
 import matplotlib.pyplot as plt
 import numpy as np
+from typing import  Text
 
 
-def plot_confusion_matrix(cm,
-                          target_names,
-                          title='Confusion matrix',
-                          cmap=None,
-                          normalize=True):
+def plot_confusion_matrix(cm: np.array,
+                          target_names: Text,
+                          title: Text = 'Confusion matrix',
+                          cmap: matplotlib.colors.LinearSegmentedColormap = None,
+                          normalize: bool = True):
     """
     given a sklearn confusion matrix (cm), make a nice plot
 
