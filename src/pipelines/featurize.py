@@ -1,19 +1,20 @@
 import argparse
 from typing import Text
-
 import yaml
 
 from src.data.dataset import get_dataset
 from src.features.features import extract_features
 
 
-def featurize(config_path: Text):
+def featurize(config_path: Text) -> None:
+    """Create new features.
+    Args:
+        config_path {Text}: path to config
+    """
 
-    config = yaml.load(open(config_path), Loader=yaml.FullLoader)
-
+    config = yaml.safe_load(open(config_path))
     dataset = get_dataset(config['dataset_csv'])
     featured_dataset = extract_features(dataset)
-
     filpath = config['featured_dataset_csv']
     featured_dataset.to_csv(filpath, index=False)
 
