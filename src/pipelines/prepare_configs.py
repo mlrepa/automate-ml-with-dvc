@@ -1,12 +1,12 @@
-
 import argparse
 from typing import Text
 import yaml
 
 
-def prepare_configs(config_path: Text):
-    """
-    Split common config into configs for steps
+def prepare_configs(config_path: Text) -> None:
+    """Split common config into configs for steps
+    Args:
+        config_path {Text}: config path
     """
 
     config = yaml.load(open(config_path), Loader=yaml.FullLoader)
@@ -15,6 +15,7 @@ def prepare_configs(config_path: Text):
     for config_name, config_params in config.items():
 
         filepath = f'{experiments_folder}/{config_name}_config.yml'
+
         with open(filepath, 'w') as config_file:
             yaml.dump(
                 data=config_params,
@@ -22,6 +23,7 @@ def prepare_configs(config_path: Text):
                 default_flow_style=False
             )
             print(f'Save config: {filepath}')
+
 
 if __name__ == '__main__':
 
