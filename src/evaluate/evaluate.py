@@ -5,15 +5,17 @@ from sklearn.metrics import confusion_matrix, f1_score
 from typing import Text, Tuple
 
 
-def evaluate(df: pd.DataFrame,
-             target_column: Text, clf: BaseEstimator) -> Tuple[float, np.ndarray]:
-    """Evaluate classifier on dataset.
+def evaluate(df: pd.DataFrame, target_column: Text, clf: BaseEstimator) -> Tuple[float, np.ndarray]:
+    """Evaluate classifier on dataset
+
     Args:
         df {pandas.DataFrame}: dataset
         target_column {Text}: target column name
         clf {sklearn.base.BaseEstimator}: classifier (trained model)
+
     Returns:
         Tuple[float, numpy.ndarray]: tuple of score and confusion matrix
+
     """
 
     # Get X and Y

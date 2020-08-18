@@ -63,16 +63,29 @@ GIT_CONFIG_EMAIL=mnrozhkov@gmail.com
 # Build image
 
 ```bash
+chmod +x build.sh
+./build.sh
+```
+
+OR
+
+```bash
 ln -sf config/.env && docker-compose build
 ```
 
 # Run     
+
+```bash
+chmod +x run.sh
+./run.sh
+```
     
-Run docker container via docker-compose  
+OR run docker container via docker-compose  
 
 ```bash
 docker-compose up
 ```
+
 
 # Tutorial 
     

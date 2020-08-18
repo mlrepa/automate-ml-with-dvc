@@ -12,9 +12,9 @@ services:
     env_file:
       - .env
     environment:
-      PYTHONPATH: '/home/dvc-2-iris-demo'
+      PYTHONPATH: '/home/dvc-5-demo-project-iris'
       LANG: 'C.UTF-8'
     ports:
       - 8888:8888
     volumes:
-      - ./:/home/dvc-2-iris-demo
+      - ./:/home/dvc-5-demo-project-iris
