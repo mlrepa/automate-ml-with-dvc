@@ -1,11 +1,26 @@
-.idea/
+# folders
+
+## Cache
 */.ipynb_checkpoints/*
 __pycache__
-.DS_Store
 
-.env
+## IDEs
+.idea/
+
+# Project
 data/*
 experiments/*
 mlruns/*
 models/*
-notebooks/OLD/*
+
+# Venv
+dvc-venv
+
+
+# files
+
+## OS configs
+.DS_Store
+
+## Configs
+.env
