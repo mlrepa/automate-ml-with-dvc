@@ -1,0 +1,64 @@
+base:
+  project: 7labs/dvc-5-demo-project-iris
+  name: iris
+  tags: [solution-0-prototype, dev]
+
+  model:
+    model_name: model.joblib
+    models_folder: models
+
+  experiments:
+    experiments_folder: experiments
+
+  random_state: 42 # random state for train/test split
+
+
+data_load:
+  dataset_csv: data/raw/iris.csv
+
+
+featurize:
+  features_path: data/interim/featured_iris.csv
+  target_column: target
+
+
+data_split:
+  folder: experiments
+  train_path: data/processed/train_iris.csv
+  test_path: data/processed/test_iris.csv
+  test_size: 0.2
+
+
+train:
+  cv: 5
+  estimator_name: svm
+  estimators:
+
+    logreg: # sklearn.linear_model.LogisticRegression
+      param_grid: # params of GridSearchCV constructor
+        C: [0.001, 0.01]
+        max_iter: [100]
+        solver: ['lbfgs']
+        multi_class: ['multinomial']
+
+    svm: # sklearn.svm.SVC
+      param_grid:
+        C: [0.1, 1.0]
+        kernel: ["rbf", "linear"]
+        gamma: ["scale"]
+        degree: [3, 5]
+#
+#    knn: # sklearn.neighbors.KNeighborsClassifier
+#      param_grid:
+#        n_neighbors: [5,15]
+#        p: [1,2]
+#
+
+
+
+evaluate:
+  metrics_file: eval.txt
+  confusion_matrix_png: confusion_matrix.png
+  classes_path: classess.csv
+
+
