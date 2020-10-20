@@ -4,12 +4,9 @@ from sklearn.model_selection import train_test_split
 from typing import Text
 import yaml
 
-from src.data.dataset import get_dataset
-from src.transforms.trainsforms import transform_target_values_to_labels
 
-
-def split_dataset(config_path: Text) -> None:
-    """Split dataset into train/test
+def data_split(config_path: Text) -> None:
+    """Split dataset into train/test.
     Args:
         config_path {Text}: path to config
     """
@@ -35,5 +32,5 @@ if __name__ == '__main__':
     args_parser.add_argument('--config', dest='config', required=True)
     args = args_parser.parse_args()
 
-    split_dataset(config_path=args.config)
+    data_split(config_path=args.config)
 

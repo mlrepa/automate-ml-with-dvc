@@ -2,11 +2,11 @@ import itertools
 import matplotlib.colors
 import matplotlib.pyplot as plt
 import numpy as np
-from typing import  Text
+from typing import List, Text
 
 
 def plot_confusion_matrix(cm: np.array,
-                          target_names: Text,
+                          target_names: List[Text],
                           title: Text = 'Confusion matrix',
                           cmap: matplotlib.colors.LinearSegmentedColormap = None,
                           normalize: bool = True):
@@ -76,4 +76,5 @@ def plot_confusion_matrix(cm: np.array,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
-    plt.show()
+
+    return plt

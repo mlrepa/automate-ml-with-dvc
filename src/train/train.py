@@ -6,6 +6,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import f1_score, make_scorer
 from typing import Dict, Text
 
+
 class UnsupportedClassifier(Exception):
 
     def __init__(self, estimator_name):
@@ -26,6 +27,7 @@ def train_lr(df: pd.DataFrame, target_column: Text) -> LogisticRegression:
     logreg.fit(X_train, y_train)
 
     return logreg
+
 
 def get_supported_estimator() -> Dict:
     """
@@ -49,9 +51,8 @@ def train(df: pd.DataFrame, target_column: Text,
         estimator_name {Text}: estimator name
         param_grid {Dict}: grid parameters
         cv {int}: cross-validation value
-
     Returns:
-
+        trained model
     """
 
     estimators = get_supported_estimator()
