@@ -57,7 +57,7 @@ train:
 
 
 evaluate:
-  metrics_file: eval.txt
+  metrics_file: metrics.json
   confusion_matrix_png: confusion_matrix.png
   classes_path: classess.csv
 
