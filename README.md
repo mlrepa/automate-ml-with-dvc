@@ -44,24 +44,8 @@ jupyter nbextension enable toc2/main
 jupyter notebook
 ```
 
-## 7. Get data
 
-Download iris.csv
+## 7. References used for this tutorial
 
-```bash
-wget -P data/raw/ -nc https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv
-```
-
-It may not work for Windows. So, use the [this link](https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv) 
-to load data into `data/raw/` folder
-
-
-## 8. Tutorial description
-
-Description of steps ...
-
-
-## 9. References used for this tutorial
-
-1. [DVC tutorial](https://dvc.org/doc/tutorial) 
+1. [DVC tutorial](https://dvc.org/doc/tutorial)
 2. [100 - Logistic Regression with IRIS and pytorch](https://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/100_Logistic_IRIS.html) 
