@@ -3,7 +3,7 @@ import joblib
 import json
 import os
 import pandas as pd
-from typing import Text, Dict, List
+from typing import Text
 import yaml
 
 from src.data.dataset import get_target_names
