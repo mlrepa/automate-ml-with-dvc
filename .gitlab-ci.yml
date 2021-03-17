@@ -1,0 +1,112 @@
+variables:
+  DEPLOY_IMAGE: mlrepa/sklearn_deploy_service:latest
+  DEPLOY_PORT: 9000
+  CML_MAGE: mlrepa/cml:latest
+  PROJECT_MODEL_PATH: models/model.joblib
+  DOCKER_MODEL_PATH: /home/deploy/models/model.joblib
+
+stages:
+  - build
+  - test
+  - experiments
+  - deploy
+
+build:
+  tags:
+    - shell
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+  stage: build
+  script:
+    - docker pull $DEPLOY_IMAGE
+    - |
+      if [ ! -d "/tmp/$CI_PROJECT_NAME" ]; then
+        project_url=${CI_PROJECT_URL//"https://"/}
+        git clone \
+            https://oauth2:$repo_token@${project_url}.git \
+            "/tmp/$CI_PROJECT_NAME"
+      fi
+      cd /tmp/$CI_PROJECT_NAME
+      git fetch
+      git checkout $CI_COMMIT_REF_NAME
+      git pull origin $CI_COMMIT_REF_NAME
+      dvc pull
+
+test:
+  tags:
+    - shell
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+  stage: test
+  script:
+    - cd /tmp/$CI_PROJECT_NAME
+    - |
+      docker run \
+            --name=deploy-sklearn-test \
+            --rm \
+            -v $(pwd)/tests:/home/deploy/tests \
+            -v $(pwd)/$PROJECT_MODEL_PATH:$DOCKER_MODEL_PATH \
+            -e MODEL_PATH=$DOCKER_MODEL_PATH \
+                $DEPLOY_IMAGE /bin/bash -c "
+                    pytest /home/deploy/tests/test_model.py
+                "
+
+cml:
+  tags:
+    - docker,experiments
+  stage: experiments
+  image: mlrepa/cml:latest
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "experiments"
+  script:
+    - apt-get install -y jq
+    - git fetch
+    - git branch --list
+    - git checkout $CI_COMMIT_REF_NAME
+    - git pull origin $CI_COMMIT_REF_NAME
+    - dvc pull --all-commits -q
+
+    # Report metrics
+    - echo "## Metrics report for $CI_COMMIT_REF_NAME" >> report.md
+    - |
+      echo "## f1_score: $(cat reports/metrics.json | jq '.f1_score')" >> report.md
+    - dvc metrics diff --show-md --all experiments  >> report.md
+    - echo >> report.md
+    - cml-publish reports/confusion_matrix.png --md >> report.md
+
+    # Publish confusion matrix diff
+    - cml-send-comment report.md
+
+deploy:
+  tags:
+    - shell
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+  stage: deploy
+  script:
+    - cd /tmp/$CI_PROJECT_NAME
+    - pwd
+    - |
+      if ! curl http://localhost:9000/healthcheck; then
+        docker run \
+            -d \
+            --name=deploy-sklearn-$(date +"%Y-%m-%d-%H-%M-%S") \
+            -v $(pwd)/$PROJECT_MODEL_PATH:$DOCKER_MODEL_PATH \
+            -e MODEL_PATH=$DOCKER_MODEL_PATH \
+            -p $DEPLOY_PORT:9000 \
+                $DEPLOY_IMAGE
+      else
+        curl -X POST http://localhost:9000/reload-model
+      fi

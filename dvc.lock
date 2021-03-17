@@ -1,0 +1,158 @@
+data_load:
+  cmd: python src/pipelines/data_load.py --config=params.yaml
+  deps:
+  - path: src/pipelines/data_load.py
+    md5: 0d837812187f71bb11cc98fb1df52c48
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_load:
+        dataset_csv: data/raw/iris.csv
+  outs:
+  - path: data/raw/iris.csv
+    md5: 4224576f0267bf88902f87f0f6200967
+featurize:
+  cmd: python src/pipelines/featurize.py --config=params.yaml
+  deps:
+  - path: data/raw/iris.csv
+    md5: 4224576f0267bf88902f87f0f6200967
+  - path: src/pipelines/featurize.py
+    md5: 3caa894187666f870421bc134c6ccd93
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_load:
+        dataset_csv: data/raw/iris.csv
+      featurize:
+        features_path: data/processed/featured_iris.csv
+        target_column: target
+  outs:
+  - path: data/processed/featured_iris.csv
+    md5: 5d03a1564b3038fc35a842f8e4bde491
+data_split:
+  cmd: python src/pipelines/data_split.py --config=params.yaml
+  deps:
+  - path: data/processed/featured_iris.csv
+    md5: 5d03a1564b3038fc35a842f8e4bde491
+  - path: src/pipelines/data_split.py
+    md5: 3566ead64d6cd6136854a31a68249f51
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_split:
+        folder: experiments
+        train_path: data/processed/train_iris.csv
+        test_path: data/processed/test_iris.csv
+        test_size: 0.3
+      featurize:
+        features_path: data/processed/featured_iris.csv
+        target_column: target
+  outs:
+  - path: data/processed/test_iris.csv
+    md5: 68bc1ccd3c9c0da876212cde4088d619
+  - path: data/processed/train_iris.csv
+    md5: a0103fade0a27653e864b612148f5506
+train:
+  cmd: python src/pipelines/train.py --config=params.yaml
+  deps:
+  - path: data/processed/train_iris.csv
+    md5: a0103fade0a27653e864b612148f5506
+  - path: src/pipelines/train.py
+    md5: 53f18be299fc96fb22067b6ddc99cdbb
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_split.train_path: data/processed/train_iris.csv
+      featurize.target_column: target
+      train:
+        cv: 3
+        estimator_name: logreg
+        estimators:
+          logreg:
+            param_grid:
+              C:
+              - 0.001
+              - 0.01
+              - 0.1
+              max_iter:
+              - 100
+              solver:
+              - lbfgs
+              multi_class:
+              - multinomial
+          svm:
+            param_grid:
+              C:
+              - 0.1
+              - 1.0
+              kernel:
+              - rbf
+              - linear
+              gamma:
+              - scale
+              degree:
+              - 3
+              - 5
+  outs:
+  - path: models/model.joblib
+    md5: 970492486b330dc0893cc15913a2852c
+evaluate:
+  cmd: python src/pipelines/evaluate.py --config=params.yaml
+  deps:
+  - path: data/processed/test_iris.csv
+    md5: 68bc1ccd3c9c0da876212cde4088d619
+  - path: models/model.joblib
+    md5: 970492486b330dc0893cc15913a2852c
+  - path: src/pipelines/evaluate.py
+    md5: 68e12de163a7521793655e22cdbd363e
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_split.test_path: data/processed/test_iris.csv
+      evaluate:
+        metrics_file: metrics.json
+        confusion_matrix_png: confusion_matrix.png
+        classes_path: classess.csv
+      featurize.target_column: target
+  outs:
+  - path: reports/classess.csv
+    md5: a4fe980ecd7fc41d99ec73f9d635cb2d
+  - path: reports/confusion_matrix.png
+    md5: 826739948a05ba00d9b32ed861e1a4b4
+  - path: reports/metrics.json
+    md5: e01c836b389fd376ae3f6fe7f19f3cdd
