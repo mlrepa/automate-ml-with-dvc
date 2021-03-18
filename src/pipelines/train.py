@@ -3,9 +3,9 @@ import joblib
 import os
 import pandas as pd
 from typing import Text
-import yaml
 
 from src.train.train import train
+from src.utils.config import load_config
 
 
 def train_model(config_path: Text) -> None:
@@ -14,12 +14,12 @@ def train_model(config_path: Text) -> None:
         config_path {Text}: path to config
     """
 
-    config = yaml.safe_load(open(config_path))
-    estimator_name = config['train']['estimator_name']
-    param_grid = config['train']['estimators'][estimator_name]['param_grid']
-    cv = config['train']['cv']
-    target_column = config['featurize']['target_column']
-    train_df = pd.read_csv(config['data_split']['train_path'])
+    config = load_config(config_path)
+    estimator_name = config.train.estimator_name
+    param_grid = config.train.estimators[estimator_name].param_grid
+    cv = config.train.cv
+    target_column = config.featurize.target_column
+    train_df = pd.read_csv(config.data_split.train_path)
 
     model = train(
         df=train_df,
@@ -30,8 +30,8 @@ def train_model(config_path: Text) -> None:
     )
     print(model.best_score_)
 
-    model_name = config['base']['model']['model_name']
-    models_folder = config['base']['model']['models_folder']
+    model_name = config.base.model.model_name
+    models_folder = config.base.model.models_folder
 
     joblib.dump(
         model,
@@ -46,4 +46,3 @@ if __name__ == '__main__':
     args = args_parser.parse_args()
 
     train_model(config_path=args.config)
-

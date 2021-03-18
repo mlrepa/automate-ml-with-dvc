@@ -1,20 +1,19 @@
 import argparse
 from typing import Text
-import yaml
 
 from src.data.dataset import get_dataset
+from src.utils.config import load_config
 
 
 def data_load(config_path: Text) -> None:
     """Load raw data.
     Args:
         config_path {Text}: path to config
-        base_config_path {Text}: path to base config
     """
 
-    config = yaml.safe_load(open(config_path))
+    config = load_config(config_path)
     dataset = get_dataset()
-    dataset.to_csv(config['data_load']['dataset_csv'], index=False)
+    dataset.to_csv(config.data_load.dataset_csv, index=False)
 
 
 if __name__ == '__main__':

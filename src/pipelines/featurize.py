@@ -1,9 +1,9 @@
 import argparse
 import pandas as pd
 from typing import Text
-import yaml
 
 from src.features.features import extract_features
+from src.utils.config import load_config
 
 
 def featurize(config_path: Text) -> None:
@@ -12,13 +12,13 @@ def featurize(config_path: Text) -> None:
         config_path {Text}: path to config
     """
 
-    config = yaml.safe_load(open(config_path))
+    config = load_config(config_path)
 
-    dataset = pd.read_csv(config['data_load']['dataset_csv'])
+    dataset = pd.read_csv(config.data_load.dataset_csv)
     featured_dataset = extract_features(dataset)
 
-    filpath = config['featurize']['features_path']
-    featured_dataset.to_csv(filpath, index=False)
+    features_path = config.featurize.features_path
+    featured_dataset.to_csv(features_path, index=False)
 
 
 if __name__ == '__main__':
