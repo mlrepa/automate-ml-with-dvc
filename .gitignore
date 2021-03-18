@@ -12,6 +12,7 @@ data/*
 experiments/*
 mlruns/*
 models/*
+reports/*
 
 # Venv
 dvc-venv
