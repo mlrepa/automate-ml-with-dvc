@@ -1,6 +1,0 @@
-[core]
-    remote = local
-['remote "myremote"']
-    url = /tmp
-['remote "local"']
-    url = /tmp/dvc/dvc-5-demo-project-iris
