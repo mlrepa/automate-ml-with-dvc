@@ -14,6 +14,7 @@ def data_load(config_path: Text) -> None:
     config = load_config(config_path)
     dataset = get_dataset()
     dataset.to_csv(config.data_load.dataset_csv, index=False)
+    print(f'Data saved to: {config.data_load.dataset_csv}')
 
 
 if __name__ == '__main__':

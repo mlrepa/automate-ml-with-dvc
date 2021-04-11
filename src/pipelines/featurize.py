@@ -19,6 +19,8 @@ def featurize(config_path: Text) -> None:
 
     features_path = config.featurize.features_path
     featured_dataset.to_csv(features_path, index=False)
+    print(f'Features saved to: {features_path}')
+    print(f'Features shape: {featured_dataset.shape}')
 
 
 if __name__ == '__main__':

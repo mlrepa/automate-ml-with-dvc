@@ -24,6 +24,11 @@ def data_split(config_path: Text) -> None:
     test_csv_path = config.data_split.test_path
     train_dataset.to_csv(train_csv_path, index=False)
     test_dataset.to_csv(test_csv_path, index=False)
+    
+    print(f'Train data saved to: {train_csv_path}')
+    print(f'Train data shape: {train_dataset.shape}')
+    print(f'Test data saved to: {test_csv_path}')
+    print(f'Test data shape: {test_dataset.shape}')
 
 
 if __name__ == '__main__':
